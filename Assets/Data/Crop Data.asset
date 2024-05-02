@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed3f30f7e5dd2fe49b1e75022f23d174, type: 3}
   m_Name: Crop Data
   m_EditorClassIdentifier: 
-  cornPrefab: {fileID: 8372312032644146465, guid: b05096263f095c446a2f66159498a926,
+  cornPrefab: {fileID: 4917094734715727195, guid: 6d166d7343203c944bb63b85fcc804c5,
     type: 3}
