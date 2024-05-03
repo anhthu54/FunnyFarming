@@ -1,18 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class WaterPacticles : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public static Action<Vector3[]> onWaterCollided;
+    void OnParticleCollision(GameObject other){
+        ParticleSystem ps = GetComponent<ParticleSystem>();
+        List<ParticleCollisionEvent> collisionEvents = new List<ParticleCollisionEvent>();
+        int collisionAmount = ps.GetCollisionEvents(other,collisionEvents);
+        Vector3[] collisionPosition = new Vector3[collisionAmount];
+        for (int i =0; i<collisionAmount;i++){
+            collisionPosition[i] = collisionEvents[i].intersection;
+        }
+        Debug.Log("Collided");
+        onWaterCollided?.Invoke(collisionPosition);
     }
 }

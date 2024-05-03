@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 715c8fba77863e84684847380cfd552c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cropRenderer: {fileID: 2366345407627643056}
 --- !u!1001 &2836225295667212123
 PrefabInstance:
   m_ObjectHideFlags: 0
