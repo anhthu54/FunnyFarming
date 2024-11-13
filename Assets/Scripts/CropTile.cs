@@ -1,40 +1,56 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
-public enum FieldState {Empty,Sown,Watered}
+public enum FieldState {Empty,Sown,Watered,Grown}
 public class CropTile : MonoBehaviour
 {
 
     private FieldState state;
     [SerializeField] private Transform cropParent;
     [SerializeField] private Renderer tileRenderer;
-    private Crop crop;
+    private Crop _crop;
+    private CropData _cropData;
 
-    // Start is called before the first frame update
+    public static Action<CropType> onHarvested;
     void Start()
     {
         state = FieldState.Empty;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void Sow(CropData cropData){
         state = FieldState.Sown;
         
-        crop = Instantiate(cropData.cornPrefab,transform.position, Quaternion.identity, cropParent);
+        _crop = Instantiate(cropData.cropBabyPrefab,transform.position, Quaternion.identity, cropParent);
+        _cropData = cropData;
     }
-
+    
     public void Water(){
         state = FieldState.Watered;
-        Debug.Log("Watered");
-        tileRenderer.material.color = Color.gray;
-        crop.GrowUp(2f);
+        LeanTween.color(tileRenderer.gameObject, Color.gray, 1f).setEase(LeanTweenType.easeOutBack);
+        _crop.GrowUp(2f);
+        StartCoroutine(GrowUp());
+    }
+
+    private IEnumerator GrowUp()
+    {
+        yield return new WaitForSeconds(1);
+        _crop.ScaleDown();
+        _crop = Instantiate(_cropData.cropGrownPrefab, transform.position, quaternion.identity, cropParent);
+        _crop.GrowUp(2f);
+        state = FieldState.Grown;
+    }
+    
+
+    public void Harvest()
+    {
+        state = FieldState.Empty;
+        LeanTween.color(tileRenderer.gameObject, Color.white, 0.5f);
+        _crop.ScaleDown();
+        _crop.PlayEffect();
+        onHarvested?.Invoke(_cropData.cropType);
     }
 
     public bool isEmpty(){
@@ -43,5 +59,10 @@ public class CropTile : MonoBehaviour
 
     public bool isSown(){
         return state == FieldState.Sown;
+    }
+
+    public bool isGrown()
+    {
+        return state == FieldState.Grown;
     }
 }

@@ -15,22 +15,15 @@ public class PlayerAnimator : MonoBehaviour
     private float speedMultiplier;
 
 
-    void Start()
-    {
-    }
-
     public void ManageAnimations(Vector3 move){
         if(move.magnitude > 0){
             anim.SetFloat("speed", move.magnitude * speedMultiplier);
             RunAnimation();
             anim.transform.forward = move.normalized;
-        }   
+        }
         else {
             IdleAnimation();
         }
-        
-
-        
     }
 
     void RunAnimation(){
@@ -55,6 +48,16 @@ public class PlayerAnimator : MonoBehaviour
 
     public void StopWaterAnimation(){
         anim.SetLayerWeight(2,0);
+    }
+
+    public void HarvestAnimation()
+    {
+        anim.SetLayerWeight(3,1);
+    }
+
+    public void StopHarvestAnimation()
+    {
+        anim.SetLayerWeight(3,0);
     }
 }
 

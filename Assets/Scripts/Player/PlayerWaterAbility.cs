@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class PlayerWaterAbility : MonoBehaviour
@@ -18,16 +15,16 @@ public class PlayerWaterAbility : MonoBehaviour
 
         WaterPacticles.onWaterCollided += WaterCollidedCallback;
         playerSelectTool.onSelectedTool += SelectedToolCallback;
-        CropField.onFullyWateredField += FullWateredCallback;
+        CropField.onFullyGrownField += FullGrownCallback;
     }
 
     void OnDestroy(){
         WaterPacticles.onWaterCollided -= WaterCollidedCallback;
         playerSelectTool.onSelectedTool -= SelectedToolCallback;
-        CropField.onFullyWateredField -= FullWateredCallback;
+        CropField.onFullyGrownField -= FullGrownCallback;
     }
 
-    void FullWateredCallback(CropField cropField){
+    void FullGrownCallback(CropField cropField){
         if(cropField == currentCropField){
             playerAnimator.StopWaterAnimation();
         }
@@ -45,14 +42,14 @@ public class PlayerWaterAbility : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other){
-        if(other.CompareTag("CropField") && other.GetComponent<CropField>().isSown()){
+        if(other.CompareTag("CropField")){
             currentCropField = other.GetComponent<CropField>();
             EnteredField(currentCropField);
         }
     }
 
     private void EnteredField(CropField cropField){
-        if(playerSelectTool.CanWater()){
+        if(playerSelectTool.CanWater() && cropField.isSown()){
             playerAnimator.WaterAnimation();
         }
     }

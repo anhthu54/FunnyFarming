@@ -12,10 +12,11 @@ public class CropField : MonoBehaviour
     [SerializeField] private CropData cropData;
     private FieldState state;
     private int SownTile;
-    private int WateredTile;
+    private int GrownTile;
 
     public static Action<CropField> onFullySownField;
-    public static Action<CropField> onFullyWateredField;
+    public static Action<CropField> onFullyGrownField;
+    public static Action<CropField> onFullyHarvestedField;
     
     void Start(){
         state = FieldState.Empty;
@@ -73,25 +74,44 @@ public class CropField : MonoBehaviour
         }
     }
 
-    private void Water(CropTile cropTile){
-        cropTile.Water();
-        WateredTile++;
-        if(WateredTile == cropTiles.Count){
-            FieldFullyWatered();
-        }
-
+    private void Water(CropTile cropTile)
+    {
+        StartCoroutine(GrownComplete(cropTile));
     }
 
+    private IEnumerator GrownComplete(CropTile cropTile)
+    {
+        cropTile.Water();
+        yield return new WaitForSeconds(2);
+        GrownTile++;
+        if(GrownTile == cropTiles.Count){
+            FieldFullyGrown();
+        }
+    }
     private void FieldFullySown(){
         state = FieldState.Sown;
         onFullySownField?.Invoke(this);
     }
 
-    private void FieldFullyWatered(){
-        state = FieldState.Watered;
-        onFullyWateredField?.Invoke(this);
+    private void FieldFullyGrown(){
+        state = FieldState.Grown;
+        onFullyGrownField?.Invoke(this);
     }
-   
+
+    public void Harvest(Transform harvestSphere)
+    {
+        var radius = harvestSphere.localScale.z;
+        for (int i = 0; i < cropTiles.Count; i++)
+        {
+            if (cropTiles[i].isEmpty())
+                continue;
+            var distance = Vector3.Distance(harvestSphere.position, cropTiles[i].transform.position);
+            if (distance < radius)
+            {
+                cropTiles[i].Harvest();
+            }
+        }
+    }
 
     public bool isEmpty(){
         return state == FieldState.Empty;
@@ -99,5 +119,10 @@ public class CropField : MonoBehaviour
 
     public bool isSown(){
         return state == FieldState.Sown;
+    }
+    
+    public bool isGrown()
+    {
+        return state == FieldState.Grown;
     }
 }

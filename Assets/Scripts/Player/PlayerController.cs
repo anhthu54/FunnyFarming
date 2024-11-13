@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using Microsoft.Unity.VisualStudio.Editor;
 using UnityEditor.Rendering;
 using UnityEngine;
 
@@ -15,13 +14,11 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody rb;
 
-
-
     [Header(" Setting ")]
     [SerializeField]
     private float speed;
 
-    void Start()
+    private void Start()
     {
         rb = GetComponent<Rigidbody>();
         playerAnimator = GetComponent<PlayerAnimator>();

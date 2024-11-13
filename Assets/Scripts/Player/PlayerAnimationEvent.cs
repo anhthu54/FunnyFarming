@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerAnimationEvent : MonoBehaviour
 {
@@ -10,21 +11,25 @@ public class PlayerAnimationEvent : MonoBehaviour
     private ParticleSystem sowEffect;
     [SerializeField]
     private ParticleSystem waterEffect;
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
+    [SerializeField] private UnityEvent onStartHarvestEvent;
+    [SerializeField] private UnityEvent onStopHarvestEvent;
+    
     void PlaySowEffect(){
         sowEffect.Play();
     }
 
     void PlayWaterEffect(){
         waterEffect.Play();
+    }
+
+    void OnStartHarvestEvent()
+    {
+        onStartHarvestEvent?.Invoke();
+    }
+
+    void OnStopharvestEvent()
+    {
+        onStopHarvestEvent?.Invoke();
     }
 }

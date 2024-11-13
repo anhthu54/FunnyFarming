@@ -18,25 +18,18 @@ public class PlayerSelectTool : MonoBehaviour
     [Header(" Setting ")]
     [SerializeField]
     private Color selectedColor; 
-    // Start is called before the first frame update
     void Start()
     {
         SelectTool(0);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    
     public void SelectTool(int toolIndex){
         selectedTool = (Tool)toolIndex;
         for(int i = 0;i<toolImage.Length;i++)
             toolImage[i].color = i == toolIndex ? selectedColor : Color.white;
         onSelectedTool?.Invoke(selectedTool);
     }
-
+    
     public bool CanSow(){
         return selectedTool == Tool.Sow;
     }

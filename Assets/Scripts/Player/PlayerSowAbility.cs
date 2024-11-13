@@ -52,7 +52,7 @@ public class PlayerSowAbility : MonoBehaviour
     }
 
     private void EnteredField(CropField cropField){
-        if(playerSelectTool.CanSow())
+        if(playerSelectTool.CanSow() && !cropField.isSown())
             playerAnimator.SowAnimation();
     }
 
